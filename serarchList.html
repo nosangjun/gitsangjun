@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>검색결과 페이지</title>
+    <link rel="stylesheet" href="css/reset.css?ver=1" />
+    <link rel="stylesheet" href="css/default.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/detail.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <!-- minimap 관련 css-->
+    <link rel="stylesheet" href="css/minimap.css"/>
+    <!--검색 결과 페이지 관련 css-->
+    <link rel="stylesheet" href="css/searchList.css" />
+    <link rel="stylesheet" href="css/fontawesome-stars.css" />
+    <link rel="stylesheet" href="css/fontawesome-all.css" />
+    <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
+
+    <!-- 다른 css에서 정의한 css를 이 페이지에서만 다르게 보일경우 재정의하는 부분-->
+    <style>
+        #minimap_area{
+            width:250px;
+            min-height:250px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- header.jsp start -->
+<header>
+    <div class="wiDTh1o24">
+        <div class="left">
+            <div class="left logoBox">
+                <a href="index.html"><img class="logoImg" src="img/토끼정.jpg" alt="Logo_IMG"></a>
+            </div>
+            <form action="search.html" class="simpSearch left">
+                <input type="text" name="searchKey" placeholder="ex)홍대맛집"><a href="serarchList.html">
+                <button id="simple_search_btn"><i class="fa fa-search"></i></button>
+            </a>
+                <!--맨 앞의 fa가 fas 로 되야함-->
+            </form>
+        </div>
+        <div class="right">
+            <!-- 비로그인  -->
+            <!--<ul class="abs" id="navBar">
+                <li>
+                    <button class="navBtn" id="login">로그인</button>
+                </li>
+                <li><a href="" class="navBtn" id="join">회원가입</a></li>
+                <li> <a href="" class="navBtn" id="service">고객센터</a> </li>
+            </ul>-->
+            <!-- 로그인 -->
+            <ul class="abs" id="navBar">
+                <li><a class="nolgoAdd" href="nolgoadd.html">맛집 등록</a></li>
+                <li><a class="navBtn" href="logout.html">로그아웃</a></li>
+                <li><img src="img/토끼정.jpg" class="userImg" /></li>
+                <li>
+                    <div class="moreWrapper">
+                        <button class="moreBtn"><i class="fas fa-ellipsis-v"></i></button>
+                        <ul class="subList" id="userDropdownList">
+                            <li><a href="mypage.html">마이페이지</a></li>
+                            <li><a href="configureInfo.html">개인정보 수정</a></li>
+                            <li><a href="zzim.html">찜목록</a></li>
+                            <li><a href="service.html">고객센터</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<div class="fullContainer">
+    <div class="wiDTh1o24">
+        <!-- header.jsp end -->
+        <!-- 1.필터링 컴포넌트 -->
+        <section id="filters">
+            <form id="search_form">
+                <div id="search_keywords" class="row">
+                    <input type="text" id="keyword" name="searchText" value="홍대맛집" />
+                    <div id="filter_keywords"></div>
+                    <button id="btn_search"><i class="fa fa-search"></i></button>
+                </div>
+                <div id="search_filters" class="row filter">
+                    <!--<span id="filters_title">세부검색</span>-->
+                    <div class="left filtersWrapper ">
+                        <div id="location_filter" class="row">
+                            <span class="filterName">위치</span>
+                            <div id="_address">
+                                <input type="text" id="full_addr" readonly onclick="searchMapByAddr()" placeholder="주소입력">
+                                <button id="search_addr" type="button" class="btn" onclick="searchMapByAddr()"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                        <div id="categories_filter" class="row filter">
+                            <span class="filterName">장소 카테고리</span>
+                            <ul>
+                                <li class="categoryItem">
+                                    <input type="checkbox" checked name="category" value="1" />
+                                    <label><span title="관광
+                                        "></span></label>
+                                </li>
+                                <li class="categoryItem">
+                                    <input type="checkbox" name="category" value="2" />
+                                    <label><span title="축제
+                                        "></span></label>
+                                </li>
+                                <li class="categoryItem">
+                                    <input type="checkbox" name="category" value="3" />
+                                    <label><span title="문화,예술
+                                        "></span></label>
+                                </li>
+                                <li class="categoryItem">
+                                    <input type="checkbox" name="category" value="4" />
+                                    <label><span title="스포츠/레저
+                                        "></span></label>
+                                </li>
+                                <li class="categoryItem">
+                                    <input type="checkbox" name="category" value="5" />
+                                    <label><span title="맛집,술집
+                                        "></span></label>
+                                </li>
+                                <li class="categoryItem">
+                                    <input type="checkbox" name="category" value="6" />
+                                    <label><span title="뷰티,힐링
+                                        "></span></label>
+                                </li>
+                                <li class="categoryItem">
+                                    <input type="checkbox" name="category" value="7" />
+                                    <label><span title="오락
+                                        "></span></label>
+                                </li>
+                                <li class="categoryItem">
+                                    <input type="checkbox" name="category" value="8" />
+                                    <label><span title="제조,공예
+                                        "></span></label>
+                                </li>
+                                <li class="categoryItem">
+                                    <input type="checkbox" name="category" value="9" />
+                                    <label><span title="카페
+                                        "></span></label>
+                                </li>
+                                <li class="categoryItem">
+                                    <input type="checkbox" name="category" value="10" />
+                                    <label><span title="이벤트룸
+                                        "></span></label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="features_filter" class="row filter">
+                            <span class="filterName">편의시설</span>
+                            <ul>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="1" />
+                                    <label><span title="와이파이
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="2" />
+                                    <label><span title="주차/발렛
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="3" />
+                                    <label><span title="화장실
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="4" />
+                                    <label><span title="음수대
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="5" />
+                                    <label><span title="간식제공
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="6" />
+                                    <label><span title="노키즈존
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="7" />
+                                    <label><span title="콜키지
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="8" />
+                                    <label><span title="흡연실
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="9" />
+                                    <label><span title="반려동물반입가능
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="10" />
+                                    <label><span title="짐보관
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="11" />
+                                    <label><span title="개인콘센트
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="12" />
+                                    <label><span title="충전기대여
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="13" />
+                                    <label><span title="탈 것 대여
+                                        "></span></label>
+                                </li>
+                                <li class="featureItem">
+                                    <input type="checkbox" name="feature" value="14" />
+                                    <label><span title="놀이방
+                                        "></span></label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="price_range_filter" class="row filter">
+                            <span class="filterName">가격대</span>
+                            <input type="text" id="min_price" placeholder="최소가격" name="minPrice" />원 ~
+                            <input type="text" id="max_price" placeholder="최대가격" name="maxPrice" />원
+                        </div>
+                    </div>
+                    <div class="left mapWrapper">
+                        <div id="map_area">
+                            <div id="minimap_area"> M A P</div>
+                            <span class="map_info map_info_first">주소를 모르신다구요?</span>
+                            <span class="map_info map_info_second">지도에서 원하는 위치를 클릭하세요!</span>
+                            <div id="clickLatlng"></div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="btn_show_filters" class="down"><span>필터 펼치기</span> <i class="fas fa-angle-down"></i></button>
+            </form>
+        </section>
+        <!-- 2.놀곳 검색결과 리스트 -->
+        <section id="nolgo_list_area" class="searchListArea">
+            <div class="searchResultTitleBundle">
+                <span class="searchItemName">홍대맛집</span>
+                <span class="totItems"><strong>34</strong>개의 검색 결과</span>
+            </div>
+            <div class="searchResultFrame horizontal">
+                <div class="leftRightBtnBox">
+                    <button class="left"><i class="fas fa-angle-left"></i></button>
+                    <button class="right"><i class="fas fa-angle-right"></i></button>
+                </div>
+                <!-- little_show = j : 빼꼼히 보이는 width값-->
+                <ul class="leftList" data-little_show="50">
+                </ul>
+                <script type="text/template" id="nolgo_item_tmpl">
+                    <@_.each(nolgos,function(nolgo){@>
+                    <li class="searchItem nolGoItem shutterable" data-id="<@=nolgo.id@>">
+                        <a href="<@=nolgo.id@>">
+                            <!--nolgo 상세페이지 링크 -->
+                            <div class="imgBox">
+                                <img class="nolGoImg" src="img/<@=nolgo.image@>" />
+                            </div>
+                            <div class="infoBundle">
+                                        <span class="cntGo" title="Go수">
+                                        <@if(nolgo.isGoCheck){@>
+                                            <i class="fas fa-heart"></i>
+                                        <@}else{@>
+                                            <i class="far fa-heart"></i>
+                                        <@}@>
+                                        <@=nolgo.cntGo@>
+                                    </span>
+                                <div class="basicInfoBox">
+                                    <div class="catImg">
+                                        <img src="img/<@=nolgo.firstCat@>.png" />
+                                    </div>
+                                    <div class="basicTextInfo">
+                                        <div class="row nolgoName">
+                                            <span><@=nolgo.name@></span>
+                                        </div>
+                                        <div class="row nolgoLocation">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span><@=nolgo.firstArea@> <@=nolgo.secondArea@></span>
+                                        </div>
+                                        <div class="row nolgoSubCategories">
+                                                    <span class="relInfos decoable">
+                                        <@for(var cat in nolgo.customCats){@>#<@=nolgo.customCats[cat]@><@}@>
+                                    </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="shutterInfoBox">
+                                    <div class="row price">
+                                        <i class="fas fa-dollar-sign"></i> 1인당 최소<span><@=nolgo.minPrice@></span>원 최대 <span><@=nolgo.maxPrice@></span>원
+                                    </div>
+                                    <div class="row facilit">
+                                        <@ for(var facil in nolgo.facils){ @>
+                                        <@=facilTags[facil]@>
+                                        <@ } @>
+                                    </div>
+                                    <div class="row">
+                                        <span>평점</span>
+                                        <select class="averageRatingOptionList" data-rating="<@=nolgo.rating@>">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5" selected>5</option>
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                                <span class="operTime" title="영업시간">
+                                        <span class="open">OPEN</span>
+                                                    <!-- nolgo.openTime/closeTime은 나중에 moment로 포맷 수정 -->
+                                                <@=isAMPM(nolgo.openTime)@> <strong><@=moment(nolgo.openTime,"HH:mm").format("hh:mm")@></strong>
+                                                    </span>
+                                        <span class="operTime" title="영업시간">
+                                        <span class="close">CLOSE</span>
+                                                    <@=isAMPM(nolgo.closeTime)@> <strong><@=moment(nolgo.closeTime,"HH:mm").format("hh:mm")@></strong>
+                                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <@});@>
+                </script>
+            </div>
+        </section>
+        <!-- 3.유저 검색 결과 리스트 -->
+        <section id="user_list_area" class="searchListArea">
+            <div class="searchResultTitleBundle">
+                <span class="searchItemName">유저</span>
+                <span class="totItems"><strong>20</strong>개의 검색 결과</span>
+            </div>
+            <div class="searchResultFrame horizontal">
+                <div class="leftRightBtnBox">
+                    <button class="left"><i class="fas fa-angle-left"></i></button>
+                    <button class="right"><i class="fas fa-angle-right"></i></button>
+                </div>
+                <ul class="leftList">
+                </ul>
+                <script type="text/template" id="user_item_template">
+                    <@_.each(users,function(user){@>
+                    <li class="searchItem userItem shutterable" data-no="<@=user.no@>">
+                        <a href="<@=user.no@>.html">
+                            <div class="userInfoBox">
+                                <div class="profileBox">
+                                    <div class="profile">
+                                        <div class="row">
+                                            <img class="imgUserProfile" src="img/<@=user.profileImage@>" />
+                                        </div>
+                                        <div class="row">
+                                            <span class="nickname"><@=user.nickname@></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="textInfoBox">
+                                    <div class="row icons">
+                                        <span class="cntFollower" title="팔로워"><i class="imgIcon"></i> <@=user.cntFollower@></span>
+                                        <span class="bar"></span>
+                                        <span class="cntAddGo" title="등록한 놀GO"><i class="imgIcon"></i> <@=user.cntAddNolgo@></span>
+                                        <span class="bar"></span>
+                                        <span class="cntAddReview" title="작성한 리뷰"><i class="imgIcon"></i> <@=user.cntWrritenReview@></span>
+                                    </div>
+                                    <div class="row relInfosBox">
+                                        <p class="relInfos decoable">
+                                            <@for(var i in user.relInfos){@>
+                                            #
+                                            <@=user.relInfos[i]@>
+                                            <@}@>
+                                        </p>
+                                    </div>
+                                    <div class="row introBox">
+                                        <p>
+                                            <@=user.intro@>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <@});@>
+                </script>
+            </div>
+        </section>
+        <!-- 4.리뷰 검색 결과 리스트-->
+        <!--review_list_area = c -->
+        <section id="review_list_area" class="searchListArea">
+            <div class="searchResultTitleBundle">
+                <span class="searchItemName">리뷰</span>
+                <span class="totItems"><strong>56</strong>개의 검색 결과</span>
+            </div>
+            <div class="searchResultFrame vertical">
+                <ul class="topDown">
+                </ul>
+                <script type="text/template" id="review_item_template">
+                    <@_.each(reviews,function(review){@>
+                    <@//미디어가 포함된 리뷰인지 확인하기위한 변수@>
+                    <@ var isMedia=review.media!=null; @>
+                    <li class="searchItem reviewItem <@if(isMedia){@>mediaReview<@}@>" data-no="<@=review.no@>">
+                        <a href="리뷰상세페이지.html">
+                            <@if(isMedia){ //<!--이미지가 있는 리뷰만 추가되는 div-->
+                            @>
+                            <div class="previewImg">
+                                <img src="img/<@=review.media@>" />
+                            </div>
+                            <@}@>
+                            <div class="basicInfoBox">
+                                <div class="row nolgoInfoBox">
+                                    <i class="fas fa-map-marker-alt"></i> <span class="nolgoName"><@=review.nolgoName@></span>
+                                    <span class="relInfos right">
+                                            <@for(var i in review.relInfos){@>
+                                            #<@=review.relInfos[i]@>
+                                            <@}@>
+                                        </span>
+                                </div>
+                                <div class="row writeInfoBox">
+                                                            <span class="reviewTitle">
+                                <@=review.title@>
+                            </span>
+                                    <span class="bar"></span>
+                                    <i class="fas fa-user-circle"></i> <strong><@=review.wrriter@></strong> <span class="bar"></span> <span class="writeTime"><@=moment(review.wrritenDate,'YYYY/MM/dd HH:mm:ss').fromNow()@></span>
+                                </div>
+                                <div class="row previewBox decoable">
+                                    <@=review.textContent@>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <@});@>
+                </script>
+            </div>
+        </section>
+        <!-- footer.jsp start -->
+    </div>
+</div>
+<footer>
+    <div class="wiDTh1o24">
+    </div>
+</footer>
+<!-- footer.jsp end -->
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.barrating.js"></script>
+<script src="js/underscore-min.js"></script>
+<script src="js/moment.js"></script>
+<!-- daum map api-->
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2f7c350955a20559cfcb4fe15bd5160e&libraries=services"></script>
+<script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
+<script src="js/daum_map.js"></script>
+<!--//daum map api-->
+<script src="js/default.js"></script>
+<script src="js/dummydata.js"></script>
+<!--searchResultFrame 리스트아이템을 옮기는 스크립트 -->
+<script>
+    //한칸 움직이는 단위 계산하는 함수
+    var boxWidthAttrs = ["width", "margin-left", "margin-right", "padding-left", "padding-right", "border-right-width", "border-left-width"];
+
+    function calcHorizontalWidth($li) {
+        var boxWidth = 0;
+        for (var i in boxWidthAttrs) {
+            boxWidth += parseInt(delPx($li.css(boxWidthAttrs[i])));
+        }
+        return boxWidth;
+    }
+
+    function delPx(px) {
+        return parseInt(px.substr(0, px.lastIndexOf('p')));
+    }
+
+    function moveHorizontalList(direction, unit, $list) {
+        direction = direction == "left" ? 1 : -1;
+        var listLeft = delPx($list.css("left"));
+        $list.css("left", (listLeft + (unit * direction)) + "px");
+    }
+
+    function initLists() {
+        //list에 아이템들이 다 할당되고나서 수행(한번에 보여질 아이템 최대갯수는 설정해놔야할듯하다.)
+        //list의 동작 초기화.(혹은 ajax로 갱신할때 적용해야할 동작함수)
+        //1. searchResultFrame 중 가로방향으로 이동할 녀석들에 먼저 클릭이벤트 적용.
+        $(".searchResultFrame.horizontal").each(function() {
+            //1.한 번 클릭했을때 이동할 단위를 지정한다.
+            //li의 가로박스모델 : width+margin-left/right+padding-left/right
+            var $frame = $(this),
+                $ul = $frame.find("ul");
+            var $li = $frame.find("ul>li"),
+                moveUnit = calcHorizontalWidth($li);
+
+
+            //2. li의 갯수 = n, 한 프레임에 보일 수 있는 li의 갯수 = m, list의 width 설정
+            var n = $ul.find('.searchItem').length,
+                m = Math.round($frame.width() / moveUnit);
+            //화면 확대축소할때 뭔가 계산이 깨지는듯, 한 10px정도만 넉넉하게 잡아줌.
+            $ul.width(n * moveUnit + 10);
+
+            //3.left, right 버튼 보이기설정, 버튼 및 리스트 상태를 저장하는 객체 정의
+            var listStatus = {
+                totRightClickCnt: 0,
+                availableRightClickCnt: 0
+            };
+            var left = $frame.find(".leftRightBtnBox .left"),
+                right = $frame.find(".leftRightBtnBox .right");
+            //left는 초기상태 : hide
+            left.hide();
+            //right의 초기상태는 리스트 크기에따라
+            if (n > m) {
+                right.show();
+                //4.right가 보여지는 상황이면, 최대로 right버튼이 클릭될 수 있는 횟수 계산.
+                listStatus.totRightClickCnt = n - m;
+                listStatus.availableRightClickCnt = n - m;
+
+                //5.버튼을 클릭했을 때 해당하는 ul을 이동단위로 움직인다.
+                //right가 show인 상태에서만 클릭이벤트를 할당한다.
+
+                left.on("click", function() {
+                    listStatus.availableRightClickCnt++;
+                    moveHorizontalList("left", moveUnit, $ul);
+                    //맨왼쪽인경우 -> 오른쪽클릭가능횟수와 총 클릭횟수가 같을경우 left를 숨긴다.
+                    if (listStatus.availableRightClickCnt == listStatus.totRightClickCnt) {
+                        left.hide();
+                    } else {
+                        //left를 눌렀을때 availableRightClickCnt가 0인경우는 없으니까
+                        //right을 show한다.
+                        right.show();
+                    }
+                });
+                right.on("click", function() {
+                    listStatus.availableRightClickCnt--;
+                    moveHorizontalList("right", moveUnit, $ul);
+                    //맨오른쪽인경우 -> 오른쪽클릭가능횟수가 0이면 right를 숨긴다.
+                    if (listStatus.availableRightClickCnt == 0) {
+                        right.hide();
+                    } else {
+                        //마찬가지로 right를 눌렀을때 availableRightClickCnt가 totRightClickCnt와 같은경우는 없으니까
+                        //right을 show한다.
+                        left.show();
+                    }
+                });
+            } else {
+                right.hide();
+            }
+
+
+
+
+        });
+
+    }
+</script>
+<!-- 필터 컴포넌트 클릭이나 변경시 필터키워드 생성 및 제거하는 함수정의하는 스크립트-->
+<script>
+    //filter에서 이벤트가 발생하는 부분에 다 넣는다.
+    //filter컴포넌트의 이벤트 init부분에서 해당 컴포넌트에 해당하는 filterObject를 생성하고, 바라보게함.
+    var $filterKeywords = $("#filter_keywords");
+
+    function toggleFilterKeyword(object) {
+        if ($filterKeywords.find("#" + object.id).length == 0) {
+            l("filterObject add");
+            $filterKeywords.append($("<span id='" + object.id + "'>#" + object.filterKeyword + "</span>"));
+        } else {
+            l("filterObject remove");
+            $("#" + object.id).remove();
+        }
+    }
+</script>
+<script>
+    var filterKeywordIdx = 0;
+    var i = 0;
+    //checkbox Image height : ch
+    //checkbox Image direction : cd
+    var ch = 35,
+        cd = -1;
+    //imageCheckbox init and change event apply
+    $("#search_filters input[type='checkbox']").each(function() {
+        var $imageCheckbox = $(this).attr("id", "imgCheckbox" + i).next().attr("for", "imgCheckbox" + i).find("span").css("background-position", (i * -(ch * cd)) + "px -" + ch + "px");
+
+
+        var filterKeywordObject = {
+            id: "filterKeyword" + (filterKeywordIdx++),
+            filterKeyword: $imageCheckbox.attr("title")
+        };
+
+        //init - 체크 되있으면 필터키워드로 추가해서 default로 함.
+        if ($(this).is(":checked")) {
+            $imageCheckbox.css("background-position", (i * (ch * cd)) + "px " + 0 + "px");
+            toggleFilterKeyword(filterKeywordObject);
+        } else {
+            $imageCheckbox.css("background-position", (i * (ch * cd)) + "px -" + ch + "px");
+        }
+
+        //체크박스가 체크/해제될땐 체크될때 filter키워드를 추가, 해제될때 filter키워드를 제거
+        $(this).change(function() {
+            var idx = $(this).val() - 1;
+            if ($(this).is(":checked")) {
+                $imageCheckbox.css("background-position", (idx * (ch * cd)) + "px " + 0 + "px");
+            } else {
+                $imageCheckbox.css("background-position", (idx * (ch * cd)) + "px -" + ch + "px");
+            }
+            toggleFilterKeyword(filterKeywordObject);
+        });
+
+        i++;
+    });
+
+    var $searchFilters = $("#search_filters"),
+        $showFilterBtn = $("#btn_show_filters"),
+        oriSearchFiltersHeight = $searchFilters.height();
+    //애니메이션 효과를 위한 기본셋팅.
+    $searchFilters.height(0);
+
+    /*!애니메이션하고(slideUp,Down등 포함) transition은 충돌나므로,
+    효과를 같이 안쓰는게 좋음.*/
+    $showFilterBtn.on("click", function() {
+        var speed = 700,
+            easing = "swing";
+        if ($searchFilters.is(":visible")) {
+            $searchFilters.animate({
+                height: 0
+            }, speed, easing, function() {
+                $showFilterBtn.removeClass("up").addClass("down").find("i").removeClass("fa-angle-up").addClass("fas-angle-down");
+                $showFilterBtn.find("span").text("필터 펼치기");
+                $searchFilters.hide();
+            })
+        } else {
+            $searchFilters.show();
+            $searchFilters.animate({
+                height: oriSearchFiltersHeight
+            }, speed, easing, function() {
+                $showFilterBtn.removeClass("down").addClass("up")
+                    .find("i").removeClass("fas-angle-down").addClass("fa-angle-up");
+                $showFilterBtn.find("span").text("필터 숨기기");
+            });
+        }
+    });
+</script>
+<!--nolgoItem template으로 추가하는 스크립트-->
+<script>
+    function isAMPM(time) {
+        //시간에 따라 AM,PM 태그를 생성해서 반환하는 함수
+        time = moment(time, 'HH:mm').hour();
+        if (time < 12) {
+            return "<span class='am'>AM</span>";
+        } else {
+            return "<span class='pm'>PM</span>";
+        }
+    }
+
+    var facilTags = [
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>",
+        "<i class='fas fa-car'></i>"
+    ]
+
+    /*
+        nolgo
+            id
+            image - 대표이미지
+            cntGo - 좋아요 수
+            firstCat - 대분류카테고리
+            name
+            firstArea - 상위지역
+            secondArea - 하위지역
+            customCats - 세부카테고리(배열)
+            minPrice - 1인당 최소가격
+            maxPrice - 1인당 최대가격
+            rating  - 평점
+            openTime - 24시간 표기법으로 표시한 장소여는시간
+            closeTime
+            isGoCheck - 로그인유저가 해당장소에 Go를 눌렀는지 확인하는 속성
+            facils - 편의시설(배열)
+    */
+
+    //init lists - data mapping
+    //nolgo list init
+    var nolgoTmpl = _.template($("#nolgo_item_tmpl").html());
+
+    var nolgos = getNolgos();
+
+    var nolgoItems = nolgoTmpl({ "nolgos": nolgos });
+    $("#nolgo_list_area ul").empty().append(nolgoItems);
+    //star init
+    $(".nolGoItem").each(function() {
+        var $ratingList = $(this).find(".averageRatingOptionList");
+        $ratingList.barrating({
+            theme: 'fontawesome-stars',
+            initialRating: $ratingList.data("rating"),
+            readonly: true,
+            showSelectedRating: false
+        })
+    });
+
+    //user list init
+
+    /*
+    user
+        intro   소개글
+        relInfo 태그로보여지는 관련 단어들(속성명 변경될 수 있음, 배열)
+        cntFollower 팔로워수
+        cntAddNolgo 추가한 놀 곳수
+        cntWrritenReview    작성한 리뷰 수
+        nickname    닉네임
+        profileImage    프로필이미지
+        no  유저 no
+    */
+    var usersTmpl = _.template($("#user_item_template").html());
+    var users = getUsers();
+    var userItems = usersTmpl({ "users": users });
+    $("#user_list_area ul").empty().append(userItems);
+
+
+    //review list init
+    /*
+    review
+        media   미디어가 포함된 리뷰인경우 있는 미디어 파일
+        nolgoName   리뷰가 등록된 장소 이름
+        relInfos    관련키워드(배열)
+        title   리뷰제목
+        wrriter 작성자 유저 닉네임
+        wrritenDate YYYY/MM/dd HH:mm:ss
+        textContent 리뷰의 텍스트 컨텐츠(간략)
+    */
+
+    var reviewsTmpl = _.template($("#review_item_template").html());
+    var reviews = getReviews();
+    var reviewItems = reviewsTmpl({ "reviews": reviews });
+    $("#review_list_area ul").empty().append(reviewItems);
+
+    initLists();
+    /*
+        $.ajax({
+            url: 'json/nolgos.json',
+            dataType: 'json',
+            error: function(xhr, status, error) {
+                l(error);
+            },
+            success: function(nolgos, status, xhr) {
+                l(status);
+                var nolgoItems = nolgoTmpl({ 'nolgos': nolgos });
+                //DOM으론 barrating을 적용할 수 없음 - append 후, 추가된 item을 다시 검색해서 그요소에 barrating을 적용해야함.
+                //방법 1. item으로 온 nolgo리스트의 순서와 모두 추가가 완료된 후 .nolgoItem으로 조회한 아이템들의 순서가 완전히 동일하면 template로 추가하고 .nolgoItem으로 조회해서 다시 얻어온 데이터배열을 조회하면서 하나식 barrating 적용.
+                //방법 2. data-rating이란 속성을 추가하고 .nolgoItem으로 조회해서 각각 data-rating으로 barrating 적용
+                $("#nolgo_list_area ul").empty().append(nolgoItems);
+
+                //방법2로함
+                $(".nolGoItem").each(function() {
+                    var $ratingList = $(this).find(".averageRatingOptionList");
+                    $ratingList.barrating({
+                        theme: 'fontawesome-stars',
+                        initialRating: $ratingList.data("rating"),
+                        readonly: true,
+                        showSelectedRating: false
+                    })
+                });
+
+                initLists();
+            }
+        });
+
+        $.ajax({
+            url: 'json/users.json',
+            dataType: 'json',
+            error: function(xhr, status, error) {
+                l(error);
+            },
+            success: function(users, status, xhr) {
+                l(status);
+                var userItems = usersTmpl({ 'users': users });
+                $("#user_list_area ul").empty().append(userItems);
+
+
+                initLists();
+            }
+        });
+
+        $.ajax({
+            url: 'json/reviews.json',
+            dataType: 'json',
+            error: function(xhr, status, error) {
+                l(error);
+            },
+            success: function(reviews, status, xhr) {
+                l(status);
+                var reviewItems = reivewsTmpl({ 'reviews': reviews });
+                $("#review_list_area ul").empty().append(reviewItems);
+
+
+                initLists();
+            }
+        });
+        */
+</script>
+<!-- 테스트코드 스크립트-->
+<script>
+    var p = 1;
+    $("body *").on("click", function() {
+
+    })
+</script>
+</body>
+
+</html>
